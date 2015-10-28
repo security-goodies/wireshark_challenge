@@ -1,0 +1,104 @@
+# nginx.conf for CTFd
+
+user {{ nginx_user }} {{ nginx_user }};
+worker_processes 1;
+pid /var/run/nginx.pid;
+error_log /var/log/nginx/error.log warn;
+
+events {
+    worker_connections 1024;
+    multi_accept on;
+}
+
+http {
+    charset utf-8;
+    underscores_in_headers on;
+    server_tokens off;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_requests 200;
+    keepalive_timeout 60;
+    reset_timedout_connection off;
+
+    disable_symlinks if_not_owner;
+    merge_slashes on;
+    resolver_timeout 5;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Logging Settings
+    access_log /var/log/nginx/access.log combined;
+    error_log /var/log/nginx/error.log;
+    log_not_found off;
+
+    # Gzip Settings
+    gzip             on;
+    gzip_static      on;
+    gzip_vary        on;
+    gzip_buffers     4 32k;
+    gzip_min_length  1000;
+    gzip_proxied     expired no-cache no-store private auth;
+    gzip_types       text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+    # http security headers
+    add_header X-Frame-Options sameorigin;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Permitted-Cross-Domain-Policies master-only;
+
+    # HTTP server settings
+    server {
+        listen 80;
+        server_name {{ ansible_fqdn }};
+
+        # automatically redirect to https site
+        return 301 https://$host$request_uri;
+    }
+
+    # HTTP/S server settings
+    server {
+        listen 443 ssl;
+        server_name {{ ansible_fqdn }};
+
+        root /var/www/;
+        autoindex off;
+
+        # SSL settings, refer to https://wiki.mozilla.org/Security/Server_Side_TLS
+        ssl on;
+        ssl_certificate /etc/nginx/ssl/server.crt;
+        ssl_certificate_key /etc/nginx/ssl/server.key;
+        ssl_session_timeout 1d;
+        ssl_session_cache shared:SSL:50m;
+
+        # Diffie-Hellman parameter for DHE ciphersuites
+        ssl_dhparam /etc/nginx/ssl/dhparams;
+
+        ssl_protocols TLSv1.2;
+        ssl_prefer_server_ciphers on;
+        ssl_ciphers  'EECDH:EDH:!SSLv3:!DSS';
+
+        # make nginx serve what it can before passing to ctfd
+        location / {
+            try_files $uri @proxy;
+        }
+
+        # cache static content
+        location ~* \.(?:jpg|jpeg|gif|png|css|js)$ {
+           expires 1M;
+           access_log off;
+           add_header Cache-Control "public";
+        }
+
+        # pass everything else to ctfd
+        location @proxy {
+            proxy_pass http://localhost:9999;
+        }
+
+        # don't allow direct access to python files
+        location ~* ^.+\.py$ {
+            return 404;
+        }
+    }
+}

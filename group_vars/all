@@ -1,0 +1,13 @@
+---
+# nginx user
+nginx_user: www-data
+dhparam_size: 2048
+
+# ssl certificate
+ssl_country: CA
+ssl_state: Ontario
+ssl_city: Toronto
+ssl_org: CTFd
+ssl_ou: wireshark challenge
+ssl_email: admin@wiresharkchallenge.ctfd
+ssl_CN: "{{ ansible_fqdn }}"

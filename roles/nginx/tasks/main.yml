@@ -1,0 +1,26 @@
+---
+- name: copy nginx.conf to server
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root mode=0640
+
+- name: create ssl directory in /etc/nginx
+  file: path=/etc/nginx/ssl state=directory owner=root group=root mode=0770
+
+- name: generate self-signed SSL certificate and private key
+  command: /usr/bin/openssl req -new -x509 -nodes -newkey rsa:2048 -sha256 -keyout /etc/nginx/ssl/server.key -out /etc/nginx/ssl/server.crt -days 365 -subj '/C={{ ssl_country }}/ST={{ ssl_state }}/L={{ ssl_city }}/O={{ ssl_org }}/OU={{ ssl_ou }}/CN={{ ssl_CN }}/emailAddress={{ ssl_email }}'
+  args: 
+    creates: /etc/nginx/ssl/server.crt
+
+- name: generate SSL dhparam values
+  command: /usr/bin/openssl dhparam -out /etc/nginx/ssl/dhparams {{ dhparam_size }}
+  async: 180
+  poll: 0
+  register: dhparams_created
+  args:
+    creates: /etc/nginx/ssl/dhparams
+
+- name: change permissions on SSL private key
+  file: path=/etc/nginx/ssl/server.key mode=0400
+
+- name: create nginx document root /var/www
+  file: path=/var/www state=directory owner={{ nginx_user }} group={{ nginx_user }} mode=0755
+  notify: start nginx

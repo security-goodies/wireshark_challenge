@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  remote_user: root
+  sudo: yes
+  connection: local
+
+  vars_files:
+   - "../group_vars/all"
+
+  roles:
+    - common
+    - nginx
+    - ctfd

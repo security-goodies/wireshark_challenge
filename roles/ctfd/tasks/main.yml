@@ -1,0 +1,25 @@
+---
+- name: copy CTFd init script to server
+  copy: src=ctfd.init dest=/etc/init.d/ctfd owner=root group=root mode=0755
+
+- name: copy CTFd files to server and extract
+  unarchive: src=ctfd_files.tar.bz2 dest=/var/www 
+  args:
+    creates: /var/www/CTFd
+
+- name: transfer CTFd config.py to server
+  template: src=config.py.j2 dest=/var/www/CTFd/config.py
+
+- name: grant ownership of /var/www to www-data
+  file: path=/var/www state=directory owner={{ nginx_user }} group={{ nginx_user }} recurse=yes
+  notify: start ctfd
+
+- name: create log directory for CTFd
+  file: path=/var/log/ctfd state=directory owner={{ nginx_user }} group=adm
+  notify: start ctfd
+
+- name: verify nginx dhparams have been created
+  async_status: jid={{ dhparams_created.ansible_job_id }}
+  register: task_result
+  until: task_result.finished
+  retries: 50

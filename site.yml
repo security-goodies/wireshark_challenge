@@ -1,0 +1,13 @@
+---
+- name: wireshark_challenge deployment playbook
+  hosts: all
+  sudo: yes
+
+  roles:
+    - common
+    - nginx
+    - ctfd 
+
+  post_tasks:
+    - name: playbook deployment complete
+      shell: echo "Visit https://{{ ansible_fqdn }} to begin"
