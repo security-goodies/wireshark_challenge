@@ -93,7 +93,10 @@ http {
 
         # pass everything else to ctfd
         location @proxy {
-            proxy_pass http://localhost:9999;
+            proxy_pass http://unix:/var/run/ctfd.socket;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
 
         # don't allow direct access to python files

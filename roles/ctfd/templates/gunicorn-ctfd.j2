@@ -1,0 +1,15 @@
+CONFIG = {
+    'mode': 'wsgi',
+    'working_dir': '/var/www/CTFd',
+      'python': '/usr/bin/python',
+    'user': '{{ nginx_user }}',
+    'group': '{{ nginx_user }}',
+    'args': (
+        '--bind=unix:/var/run/ctfd.socket',
+        '--workers=2',
+        '--umask=0027',
+        '--log-level=info',
+        '--access-logfile=/var/log/gunicorn/ctfd_access.log',
+        'CTFd:create_app()',
+    ),
+}
