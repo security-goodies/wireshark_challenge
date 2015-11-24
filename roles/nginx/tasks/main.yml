@@ -21,6 +21,6 @@
 - name: change permissions on SSL private key
   file: path=/etc/nginx/ssl/server.key mode=0400
 
-- name: create nginx document root /var/www
+- name: create nginx document root - /var/www
   file: path=/var/www state=directory owner={{ nginx_user }} group={{ nginx_user }} mode=0755
   notify: restart nginx
