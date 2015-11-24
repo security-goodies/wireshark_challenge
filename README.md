@@ -1,7 +1,7 @@
 # Wireshark Challenge - CTF
 
 [![Build Status](https://img.shields.io/travis/aeibrahim/wireshark_challenge/master.svg?style=plastic)](https://travis-ci.org/aeibrahim/wireshark_challenge)
-[![Project Status](https://img.shields.io/badge/status-complete-brightgreen.svg?style=plastic)](#)
+[![Project Status](https://img.shields.io/badge/status-WIP-brightgreen.svg?style=plastic)](#)
 [![Platform](https://img.shields.io/badge/platform-Ubuntu%2014%2B-lightgrey.svg?style=plastic)](#)
 [![Apache](https://img.shields.io/badge/license-Apache-blue.svg?style=plastic)](https://www.gnu.org/licenses/gpl.html)
 
@@ -19,4 +19,4 @@ Ansible is required to use this repo. To install Ansible, see [here](https://doc
 2. add the IP address of your server to the file `inventory`
 3. set desired options in `group_vars/all`
 4. run the playbook: `ansible-playbook site.yml -i inventory -u <remote-user> -k -K`
-5. visit ctfd's web interface via your browser: `http://<server's IP address>`
+5. visit ctfd's web interface in your browser: `http://<server's IP address>`

@@ -11,3 +11,4 @@
     - common
     - nginx
     - ctfd
+    - async
