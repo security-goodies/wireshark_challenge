@@ -91,7 +91,7 @@ http {
            add_header Cache-Control "public";
         }
 
-        # pass everything else to ctfd
+        # pass everything else to gunicorn
         location @proxy {
             proxy_pass http://unix:/var/run/ctfd.socket;
             proxy_set_header Host $host;
