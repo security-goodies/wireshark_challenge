@@ -6,7 +6,7 @@ CONFIG = {
     'group': '{{ nginx_user }}',
     'args': (
         '--bind=unix:/var/run/ctfd.socket',
-        '--workers=2',
+        '--workers=1',
         '--umask=0027',
         '--log-level=info',
         '--access-logfile=/var/log/gunicorn/ctfd_access.log',

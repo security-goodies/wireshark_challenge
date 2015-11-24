@@ -20,3 +20,7 @@ Ansible is required to use this repo. To install Ansible, see [here](https://doc
 3. set desired options in `group_vars/all`
 4. run the playbook: `ansible-playbook site.yml -i inventory -u <remote-user> -k -K`
 5. visit ctfd's web interface in your browser: `http://<server's IP address>`
+
+Credentials for the admin panel: 
+* username: `admin`
+* password: `password`

@@ -3,7 +3,7 @@
 nginx_user: www-data
 
 # Diffie-Hellman parameters size
-dhparam_size: 2048
+dhparams_size: 2048
 
 # nginx root directory
 nginx_root: "/var/www/CTFd"

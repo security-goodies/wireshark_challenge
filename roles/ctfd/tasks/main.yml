@@ -13,4 +13,3 @@
 - name: grant ownership of /var/www to www-data user
   file: path=/var/www state=directory owner={{ nginx_user }} group={{ nginx_user }} recurse=yes
   notify: start gunicorn
-
