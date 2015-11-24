@@ -62,7 +62,7 @@ http {
         listen 443 ssl;
         server_name {{ ansible_fqdn }};
 
-        root /var/www/;
+        root {{ nginx_root }};
         autoindex off;
 
         # SSL settings, refer to https://wiki.mozilla.org/Security/Server_Side_TLS
@@ -103,5 +103,11 @@ http {
         location ~* ^.+\.py$ {
             return 404;
         }
+
+        # don't allow access to log files
+        location /logs {
+            return 404;
+        }
+
     }
 }

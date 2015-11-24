@@ -1,9 +1,9 @@
 ---
-- name: copy gunicorn config for ctfd
-  copy: src=gunicorn-ctfd.j2 dest=/etc/gunicorn.d/ctfd owner=root group=root mode=0644
+- name: transfer gunicorn config for ctfd
+  template: src=gunicorn-ctfd.j2 dest=/etc/gunicorn.d/ctfd owner=root group=root mode=0644
 
 - name: copy CTFd files to server and extract
-  unarchive: src=ctfd_files_new.tar.bz2 dest=/var/www 
+  unarchive: src=ctfd_files_v2.tar.bz2 dest=/var/www 
   args:
     creates: /var/www/CTFd
 

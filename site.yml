@@ -10,5 +10,5 @@
     - async
 
   post_tasks:
-    - name: playbook deployment complete
-      debug: msg="Visit https://{{ ansible_fqdn }} to begin the wireshark_challenge"
+    - name: wireshark_challenge deployment complete
+      debug: msg="Visit https://{{ ansible_default_ipv4.address }} to begin the wireshark_challenge CTF"

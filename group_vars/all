@@ -1,7 +1,12 @@
 ---
 # nginx user
 nginx_user: www-data
+
+# Diffie-Hellman parameters size
 dhparam_size: 2048
+
+# nginx root directory
+nginx_root: "/var/www/CTFd"
 
 # ssl certificate
 ssl_country: CA

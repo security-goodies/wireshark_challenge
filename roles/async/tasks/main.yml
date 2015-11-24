@@ -3,4 +3,4 @@
   async_status: jid={{ dhparams_created.ansible_job_id }}
   register: task_result
   until: task_result.finished
-  retries: 50
+  retries: 100
