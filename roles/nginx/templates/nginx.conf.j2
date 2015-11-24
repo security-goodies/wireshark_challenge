@@ -79,11 +79,6 @@ http {
         ssl_prefer_server_ciphers on;
         ssl_ciphers  'EECDH:EDH:!SSLv3:!DSS';
 
-        # make nginx serve what it can before passing to ctfd
-        location / {
-            try_files $uri @proxy;
-        }
-
         # cache static content
         location ~* \.(?:jpg|jpeg|gif|png|css|js)$ {
            expires 1M;
@@ -91,8 +86,8 @@ http {
            add_header Cache-Control "public";
         }
 
-        # pass everything else to gunicorn
-        location @proxy {
+        # pass everything to gunicorn
+        location / {
             proxy_pass http://unix:/var/run/ctfd.socket;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
@@ -103,11 +98,5 @@ http {
         location ~* ^.+\.py$ {
             return 404;
         }
-
-        # don't allow access to log files
-        location /logs {
-            return 404;
-        }
-
     }
 }
